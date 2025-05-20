@@ -8,6 +8,7 @@ import Footer from "./components/reusable/Footer"
 import { MdOutlineMailOutline } from "react-icons/md"
 import { useEffect, useState } from "react"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
+import { Analytics } from "@vercel/analytics/react"
 
 const products = [
   {
@@ -279,6 +280,7 @@ function App() {
       </section>
 
       <Footer />
+      <Analytics />
     </main>
   )
 }
