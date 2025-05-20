@@ -225,8 +225,7 @@ function App() {
             SEE MORE
           </Button>
         </div>
-        <div className="flex overflow-x-hidden gap-5 lg:gap-10">
-        <div className="flex overflow-x-hidden gap-5 lg:gap-10">
+        <div className="flex overflow-x-hidden">
           {visibleProducts().map((product) => (
             <div
               style={{ backgroundImage: `url(${product.image})` }}
@@ -241,7 +240,6 @@ function App() {
               )}
             </div>
           ))}
-        </div>
         </div>
         <div className="absolute w-full top-[50%] flex justify-between lg:justify-end lg:items-center lg:gap-3 lg:place-self-end lg:static">
           <Button
