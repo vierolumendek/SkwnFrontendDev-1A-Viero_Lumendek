@@ -6,7 +6,7 @@ import { TbBriefcase2 } from "react-icons/tb"
 import { PiNumberFiveBold } from "react-icons/pi"
 import Footer from "./components/reusable/Footer"
 import { MdOutlineMailOutline } from "react-icons/md"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 
 const products = [
@@ -38,35 +38,56 @@ const products = [
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [direction, setDirection] = useState("")
+  const [isAnimating, setIsAnimating] = useState(false)
 
-  // Ganti dengan fungsi visibleProducts yang baru
   const visibleProducts = () => {
-    // const visibleCount = 3 // Jumlah produk yang terlihat sekaligus
     const result = []
 
-    // Tampilkan produk terakhir sebelum produk pertama
-    const prevIndex = currentIndex === 0 ? products.length - 1 : currentIndex - 1
-    result.push(products[prevIndex])
+    if( window.innerWidth > 678 ) {
+      const prevIndex = currentIndex === 0 ? products.length - 1 : currentIndex - 1
+      result.push(products[prevIndex])
+    }
 
-    // Tampilkan produk saat ini
     result.push(products[currentIndex])
 
-    // Tampilkan produk berikutnya
     const nextIndex = (currentIndex + 1) % products.length
     result.push(products[nextIndex])
 
     return result
   }
 
-  // Fungsi untuk navigasi ke produk sebelumnya
   const prevProduct = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? products.length - 1 : prevIndex - 1))
+    if (isAnimating) return
+
+    setDirection("right")
+    setIsAnimating(true)
+
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex === 0 ? products.length - 1 : prevIndex - 1))
+    }, 300)
   }
 
-  // Fungsi untuk navigasi ke produk berikutnya
   const nextProduct = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length)
+    if (isAnimating) return
+
+    setDirection("left")
+    setIsAnimating(true)
+
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length)
+    }, 300)
   }
+
+  useEffect(() => {
+    if (isAnimating) {
+      const timer = setTimeout(() => {
+        setIsAnimating(false)
+      }, 600)
+
+      return () => clearTimeout(timer)
+    }
+  }, [isAnimating])
 
   return (
     <main className="min-w-full scroll-smooth">
@@ -79,6 +100,7 @@ function App() {
               variant="secondary"
               size="xl"
               icon={<IoSearch />}
+              className="w-fit"
             >
               SEARCH CATALOG
             </Button>
@@ -86,6 +108,7 @@ function App() {
               variant="outline"
               size="xl"
               icon={<FaRegPlayCircle />}
+              className="w-fit"
             >
               WATCH VIDEO
             </Button>
@@ -93,10 +116,11 @@ function App() {
         </div>
         <div
           style={{ backgroundImage: "url('/img/sofa.png')" }}
-          className="flex flex-col bg-accent justify-between p-5 text-white flex-1 w-[380px] h-[233px] bg-size-[100%] bg-center bg-no-repeat place-self-center lg:w-[522px] lg:h-[709px] lg:justify-end"
+          // className="flex flex-col bg-accent justify-between p-5 text-white flex-1 w-[380px] h-[233px] bg-size-[100%] bg-center bg-no-repeat place-self-center lg:w-[522px] lg:h-[709px] lg:justify-end"
+          className="space-y-5 flex flex-col bg-accent justify-between p-5 text-white flex-1 w-full h-full bg-size-[100%] bg-center bg-no-repeat place-self-center lg:h-[709px] lg:justify-end"
         >
           <h1 className="block lg:hidden">HIGHLIGHTED PRODUCT</h1>
-          <div className="space-y-5">
+          <div className="space-y-3">
             <span className="bg-white/60 text-sm py-1 px-2 text-primary rounded-lg lg:text-2xl">$329</span>
             <h1 className="text-2xl lg:text-6xl">Pösht Sofa</h1>
             <Button
@@ -188,7 +212,7 @@ function App() {
         </div>
       </section>
 
-      <section className="space-y-5 grid bg-primary py-10 px-5 lg:py-20 lg:px-36">
+      <section className="relative space-y-5 grid bg-primary py-10 px-5 lg:py-20 lg:px-36">
         <div className="flex justify-between items-center">
           <div className="text-secondary space-y-3">
             <p className="text-sm lg:text-2xl">OUR PRODUCTS</p>
@@ -201,6 +225,7 @@ function App() {
             SEE MORE
           </Button>
         </div>
+        <div className="flex overflow-x-hidden gap-5 lg:gap-10">
         <div className="flex overflow-x-hidden gap-5 lg:gap-10">
           {visibleProducts().map((product) => (
             <div
@@ -217,11 +242,12 @@ function App() {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-3 place-self-end">
+        </div>
+        <div className="absolute w-full top-[50%] flex justify-between lg:justify-end lg:items-center lg:gap-3 lg:place-self-end lg:static">
           <Button
             variant="secondary"
             size="icon"
-            className="rounded-full"
+            rounded="full"
             onClick={prevProduct}
           >
               <IoIosArrowBack />
@@ -229,7 +255,7 @@ function App() {
           <Button
             variant="secondary"
             size="icon"
-            className="rounded-full"
+            rounded="full"
             onClick={nextProduct}
           >
               <IoIosArrowForward />

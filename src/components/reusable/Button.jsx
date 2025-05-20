@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Button({ children, icon, variant = "default", size = "default", className, ...props }) {
+export default function Button({ children, icon, variant = "default", size = "default", rounded = "default", className, ...props }) {
   const buttonVariants = {
     default:
       "bg-primary text-secondary shadow hover:bg-primary/90",
@@ -21,11 +21,17 @@ export default function Button({ children, icon, variant = "default", size = "de
     icon: "h-9 w-9",
   }
 
+  const buttonRounded = {
+    default: "rounded-lg",
+    full: "rounded-full",
+  }
+
   return (
     <button
-      className={` inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0
+      className={` inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0
         ${buttonVariants[variant] || buttonVariants.default}
         ${buttonSize[size] || buttonSize.default}
+        ${buttonRounded[rounded] || buttonRounded.default}
         ${className}
       `}
       {...props}
